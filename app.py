@@ -10,7 +10,7 @@ else:
 
 # 2. 注入你在 Google AI Studio 调教好的灵魂
 st.title("✨ 我的专属 AI 助手")
-system_prompt = "你是一个非常专业的助手..." # 替换成你在 AI Studio 里的 System Instruction
+system_prompt = "我希望做一个可以解析设计图的页面，当我把设计图传进去的时候，可以解析这个设计图有哪些元器件和对应的数量" # 替换成你在 AI Studio 里的 System Instruction
 
 # 3. 初始化模型
 model = genai.GenerativeModel('gemini-1.5-flash', system_instruction=system_prompt)
