@@ -43,12 +43,11 @@ if uploaded_file is not None:
         st.image(image, caption="待解析的设计图", use_container_width=True)
 
     # 点击解析按钮
-    if st.button("🚀 开始智能解析"):
+ if st.button("🚀 开始智能解析"):
         model = genai.GenerativeModel('gemini-1.5-flash')
         
-        # 核心指令：要求 AI 输出 CSV 格式以便我们转换成 Excel
         prompt = """
-        请仔细分析这张设计图，识别出所有的元器件。
+        请仔细分析这张设计图（如果是PDF请扫描所有页面），识别出所有的元器件。
         请仅输出一个 CSV 格式的列表，包含两列：元器件名称, 数量。
         不要输出任何额外的解释文字，直接给数据。
         例如：
@@ -56,10 +55,18 @@ if uploaded_file is not None:
         电容, 5
         """
         
-        with st.spinner("AI 正在深度扫描并计算元器件..."):
-            input_data = [prompt, image] if image else [prompt, uploaded_file]
-            response = model.generate_content(input_data)
-            
+        with st.spinner("AI 正在扫描文档并计算元器件..."):
+            try:
+                # 核心修复逻辑：根据文件类型打包数据
+                if uploaded_file.type == "application/pdf":
+                    # PDF 需要包装成字典格式
+                    doc_content = {"mime_type": "application/pdf", "data": uploaded_file.getvalue()}
+                    response = model.generate_content([prompt, doc_content])
+                else:
+                    # 图片直接发送
+                    response = model.generate_content([prompt, image])
+                
+                # ... 后面转换表格的代码保持不变 ...            
             # 5. 处理结果并转为 Excel
             try:
                 # 将 AI 返回的文字转换为 Pandas 表格
