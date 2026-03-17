@@ -13,7 +13,7 @@ st.title("✨ 我的专属 AI 助手")
 system_prompt = "当我把设计图传进去的时候，可以解析这个设计图有哪些元器件和对应的数量" # 替换成你在 AI Studio 里的 System Instruction
 
 # 3. 初始化模型
-model = genai.GenerativeModel('gemini-1.5-flash', system_instruction=system_prompt)
+model = genai.GenerativeModel('gemini-1.5-pro', system_instruction=system_prompt)
 
 # 4. 简易聊天界面逻辑
 if "messages" not in st.session_state:
